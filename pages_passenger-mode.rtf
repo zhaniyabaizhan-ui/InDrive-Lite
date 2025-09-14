@@ -1,0 +1,328 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;\red255\green255\blue254;\red0\green0\blue0;
+\red14\green110\blue109;\red144\green1\blue18;\red19\green118\blue70;\red15\green112\blue1;\red191\green28\blue37;
+}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c100000;\cssrgb\c100000\c100000\c99608;\cssrgb\c0\c0\c0;
+\cssrgb\c0\c50196\c50196;\cssrgb\c63922\c8235\c8235;\cssrgb\c3529\c52549\c34510;\cssrgb\c0\c50196\c0;\cssrgb\c80392\c19216\c19216;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 import\cf0 \strokec4  \cf5 \strokec5 React\cf0 \strokec4 , \{ useState, useEffect \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "react"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 Link\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "react-router-dom"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 ArrowLeft\cf0 \strokec4 , \cf5 \strokec5 Navigation\cf0 \strokec4 , \cf5 \strokec5 MapPin\cf0 \strokec4 , \cf5 \strokec5 Plus\cf0 \strokec4 , \cf5 \strokec5 Clock\cf0 \strokec4 , \cf5 \strokec5 Route\cf0 \strokec4 , \cf5 \strokec5 RotateCcw\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "lucide-react"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 Button\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/components/ui/button"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 Input\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/components/ui/input"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 Checkbox\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/components/ui/checkbox"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 Badge\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/components/ui/badge"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ createPageUrl \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/utils"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 POI\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/entities/POI"\cf0 \strokec4 ;\cb1 \strokec4 \
+\
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \cf5 \strokec5 MapComponent\cf0 \strokec4  \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "../components/map/MapComponent"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \cf5 \strokec5 FloatingPanel\cf0 \strokec4  \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "../components/ui/FloatingPanel"\cf0 \strokec4 ;\cb1 \strokec4 \
+\
+\cf2 \cb3 \strokec2 const\cf0 \strokec4  \cf5 \strokec5 RESIDENTIAL_COMPLEX\cf0 \strokec4  = \{\cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4   lat: \cf7 \strokec7 51.0850\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4   lng: \cf7 \strokec7 71.4150\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4   address: \cf6 \strokec6 "Green Quarter Residential Complex"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4 \};\cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 export\cf0 \strokec4  \cf2 \strokec2 default\cf0 \strokec4  \cf2 \strokec2 function\cf0 \strokec4  \cf5 \strokec5 PassengerMode\cf0 \strokec4 () \{\cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  [pois, setPois] = useState([]);\cb1 \strokec4 \
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  [destination, setDestination] = useState(\cf2 \strokec2 null\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  [selectedPOIs, setSelectedPOIs] = useState([]);\cb1 \strokec4 \
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  [route, setRoute] = useState(\cf2 \strokec2 null\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  [isLoading, setIsLoading] = useState(\cf2 \strokec2 false\cf0 \strokec4 );\cb1 \strokec4 \
+\
+\cb3 \strokec4   useEffect(() => \{\cb1 \strokec4 \
+\cb3 \strokec4     loadPOIs();\cb1 \strokec4 \
+\cb3 \strokec4   \}, []);\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  loadPOIs = \cf2 \strokec2 async\cf0 \strokec4  () => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  poisData = \cf2 \strokec2 await\cf0 \strokec4  \cf5 \strokec5 POI\cf0 \strokec4 .list();\cb1 \strokec4 \
+\cb3 \strokec4     setPois(poisData);\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  handleMapClick = (latlng) => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  newDestination = \{\cb1 \strokec4 \
+\cb3 \strokec4       lat: latlng.lat,\cb1 \strokec4 \
+\cb3 \strokec4       lng: latlng.lng,\cb1 \strokec4 \
+\cb3 \strokec4       address: \cf6 \strokec6 `Location: \cf0 \strokec4 $\{latlng.lat.toFixed(\cf7 \strokec7 4\cf0 \strokec4 )\}\cf6 \strokec6 , \cf0 \strokec4 $\{latlng.lng.toFixed(\cf7 \strokec7 4\cf0 \strokec4 )\}\cf6 \strokec6 `\cf0 \cb1 \strokec4 \
+\cb3 \strokec4     \};\cb1 \strokec4 \
+\cb3 \strokec4     setDestination(newDestination);\cb1 \strokec4 \
+\cb3 \strokec4     buildRoute(newDestination);\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  buildRoute = (dest) => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 if\cf0 \strokec4  (!dest) \cf2 \strokec2 return\cf0 \strokec4 ;\cb1 \strokec4 \
+\
+\cb3 \strokec4     setIsLoading(\cf2 \strokec2 true\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4     \cb1 \strokec4 \
+\cb3 \strokec4     setTimeout(() => \{\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 const\cf0 \strokec4  waypoints = [\cb1 \strokec4 \
+\cb3 \strokec4         [\cf5 \strokec5 RESIDENTIAL_COMPLEX\cf0 \strokec4 .lat, \cf5 \strokec5 RESIDENTIAL_COMPLEX\cf0 \strokec4 .lng],\cb1 \strokec4 \
+\cb3 \strokec4         ...selectedPOIs.map(poi => [poi.latitude, poi.longitude]),\cb1 \strokec4 \
+\cb3 \strokec4         [dest.lat, dest.lng]\cb1 \strokec4 \
+\cb3 \strokec4       ];\cb1 \strokec4 \
+\cb3 \strokec4       \cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 const\cf0 \strokec4  routeCoords = [];\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 for\cf0 \strokec4  (\cf2 \strokec2 let\cf0 \strokec4  i = \cf7 \strokec7 0\cf0 \strokec4 ; i < waypoints.length - \cf7 \strokec7 1\cf0 \strokec4 ; i++) \{\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 const\cf0 \strokec4  start = waypoints[i];\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 const\cf0 \strokec4  end = waypoints[i + \cf7 \strokec7 1\cf0 \strokec4 ];\cb1 \strokec4 \
+\cb3 \strokec4         \cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 const\cf0 \strokec4  steps = \cf7 \strokec7 5\cf0 \strokec4 ;\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 for\cf0 \strokec4  (\cf2 \strokec2 let\cf0 \strokec4  j = \cf7 \strokec7 0\cf0 \strokec4 ; j <= steps; j++) \{\cb1 \strokec4 \
+\cb3 \strokec4           \cf2 \strokec2 const\cf0 \strokec4  ratio = j / steps;\cb1 \strokec4 \
+\cb3 \strokec4           \cf2 \strokec2 const\cf0 \strokec4  lat = start[\cf7 \strokec7 0\cf0 \strokec4 ] + (end[\cf7 \strokec7 0\cf0 \strokec4 ] - start[\cf7 \strokec7 0\cf0 \strokec4 ]) * ratio + (\cf5 \strokec5 Math\cf0 \strokec4 .random() - \cf7 \strokec7 0.5\cf0 \strokec4 ) * \cf7 \strokec7 0.002\cf0 \strokec4 ;\cb1 \strokec4 \
+\cb3 \strokec4           \cf2 \strokec2 const\cf0 \strokec4  lng = start[\cf7 \strokec7 1\cf0 \strokec4 ] + (end[\cf7 \strokec7 1\cf0 \strokec4 ] - start[\cf7 \strokec7 1\cf0 \strokec4 ]) * ratio + (\cf5 \strokec5 Math\cf0 \strokec4 .random() - \cf7 \strokec7 0.5\cf0 \strokec4 ) * \cf7 \strokec7 0.002\cf0 \strokec4 ;\cb1 \strokec4 \
+\cb3 \strokec4           routeCoords.push([lat, lng]);\cb1 \strokec4 \
+\cb3 \strokec4         \}\cb1 \strokec4 \
+\cb3 \strokec4       \}\cb1 \strokec4 \
+\
+\cb3 \strokec4       setRoute(\{\cb1 \strokec4 \
+\cb3 \strokec4         coordinates: routeCoords,\cb1 \strokec4 \
+\cb3 \strokec4         distance: calculateDistance(waypoints) * \cf7 \strokec7 1.2\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4         duration: calculateDuration(waypoints),\cb1 \strokec4 \
+\cb3 \strokec4       \});\cb1 \strokec4 \
+\cb3 \strokec4       setIsLoading(\cf2 \strokec2 false\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4     \}, \cf7 \strokec7 1000\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  calculateDistance = (waypoints) => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 let\cf0 \strokec4  total = \cf7 \strokec7 0\cf0 \strokec4 ;\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 for\cf0 \strokec4  (\cf2 \strokec2 let\cf0 \strokec4  i = \cf7 \strokec7 0\cf0 \strokec4 ; i < waypoints.length - \cf7 \strokec7 1\cf0 \strokec4 ; i++) \{\cb1 \strokec4 \
+\cb3 \strokec4       total += getDistanceFromLatLonInKm(\cb1 \strokec4 \
+\cb3 \strokec4         waypoints[i][\cf7 \strokec7 0\cf0 \strokec4 ], waypoints[i][\cf7 \strokec7 1\cf0 \strokec4 ],\cb1 \strokec4 \
+\cb3 \strokec4         waypoints[i + \cf7 \strokec7 1\cf0 \strokec4 ][\cf7 \strokec7 0\cf0 \strokec4 ], waypoints[i + \cf7 \strokec7 1\cf0 \strokec4 ][\cf7 \strokec7 1\cf0 \strokec4 ]\cb1 \strokec4 \
+\cb3 \strokec4       );\cb1 \strokec4 \
+\cb3 \strokec4     \}\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 return\cf0 \strokec4  total;\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  calculateDuration = (waypoints) => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  distance = calculateDistance(waypoints);\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 return\cf0 \strokec4  \cf5 \strokec5 Math\cf0 \strokec4 .round(distance / \cf7 \strokec7 30\cf0 \strokec4  * \cf7 \strokec7 60\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  \cf5 \strokec5 R\cf0 \strokec4  = \cf7 \strokec7 6371\cf0 \strokec4 ;\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  dLat = deg2rad(lat2 - lat1);\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  dLon = deg2rad(lon2 - lon1);\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  a = \cb1 \strokec4 \
+\cb3 \strokec4       \cf5 \strokec5 Math\cf0 \strokec4 .sin(dLat/\cf7 \strokec7 2\cf0 \strokec4 ) * \cf5 \strokec5 Math\cf0 \strokec4 .sin(dLat/\cf7 \strokec7 2\cf0 \strokec4 ) +\cb1 \strokec4 \
+\cb3 \strokec4       \cf5 \strokec5 Math\cf0 \strokec4 .cos(deg2rad(lat1)) * \cf5 \strokec5 Math\cf0 \strokec4 .cos(deg2rad(lat2)) * \cb1 \strokec4 \
+\cb3 \strokec4       \cf5 \strokec5 Math\cf0 \strokec4 .sin(dLon/\cf7 \strokec7 2\cf0 \strokec4 ) * \cf5 \strokec5 Math\cf0 \strokec4 .sin(dLon/\cf7 \strokec7 2\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  c = \cf7 \strokec7 2\cf0 \strokec4  * \cf5 \strokec5 Math\cf0 \strokec4 .atan2(\cf5 \strokec5 Math\cf0 \strokec4 .sqrt(a), \cf5 \strokec5 Math\cf0 \strokec4 .sqrt(\cf7 \strokec7 1\cf0 \strokec4 -a));\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 return\cf0 \strokec4  \cf5 \strokec5 R\cf0 \strokec4  * c;\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  deg2rad = (deg) => deg * (\cf5 \strokec5 Math\cf0 \strokec4 .\cf5 \strokec5 PI\cf0 \strokec4 /\cf7 \strokec7 180\cf0 \strokec4 );\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  handlePOIToggle = (poi, checked) => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 if\cf0 \strokec4  (checked) \{\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 if\cf0 \strokec4  (poi.rating >= \cf7 \strokec7 4.6\cf0 \strokec4 ) \{\cb1 \strokec4 \
+\cb3 \strokec4         setSelectedPOIs([...selectedPOIs, poi]);\cb1 \strokec4 \
+\cb3 \strokec4       \}\cb1 \strokec4 \
+\cb3 \strokec4     \} \cf2 \strokec2 else\cf0 \strokec4  \{\cb1 \strokec4 \
+\cb3 \strokec4       setSelectedPOIs(selectedPOIs.filter(p => p.id !== poi.id));\cb1 \strokec4 \
+\cb3 \strokec4     \}\cb1 \strokec4 \
+\cb3 \strokec4     \cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 if\cf0 \strokec4  (destination) \{\cb1 \strokec4 \
+\cb3 \strokec4       buildRoute(destination);\cb1 \strokec4 \
+\cb3 \strokec4     \}\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  handlePOIClick = (poi) => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  isSelected = selectedPOIs.some(p => p.id === poi.id);\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 if\cf0 \strokec4  (poi.rating >= \cf7 \strokec7 4.6\cf0 \strokec4 ) \{\cb1 \strokec4 \
+\cb3 \strokec4       handlePOIToggle(poi, !isSelected);\cb1 \strokec4 \
+\cb3 \strokec4     \}\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  resetRoute = () => \{\cb1 \strokec4 \
+\cb3 \strokec4     setDestination(\cf2 \strokec2 null\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4     setRoute(\cf2 \strokec2 null\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4     setSelectedPOIs([]);\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  markers = [\cb1 \strokec4 \
+\cb3 \strokec4     \{\cb1 \strokec4 \
+\cb3 \strokec4       lat: \cf5 \strokec5 RESIDENTIAL_COMPLEX\cf0 \strokec4 .lat,\cb1 \strokec4 \
+\cb3 \strokec4       lng: \cf5 \strokec5 RESIDENTIAL_COMPLEX\cf0 \strokec4 .lng,\cb1 \strokec4 \
+\cb3 \strokec4       popup: \cf6 \strokec6 "Your pickup location"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4     \}\cb1 \strokec4 \
+\cb3 \strokec4   ];\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 if\cf0 \strokec4  (destination) \{\cb1 \strokec4 \
+\cb3 \strokec4     markers.push(\{\cb1 \strokec4 \
+\cb3 \strokec4       lat: destination.lat,\cb1 \strokec4 \
+\cb3 \strokec4       lng: destination.lng,\cb1 \strokec4 \
+\cb3 \strokec4       popup: \cf6 \strokec6 "Your destination"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4     \});\cb1 \strokec4 \
+\cb3 \strokec4   \}\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 return\cf0 \strokec4  (\cb1 \strokec4 \
+\cb3 \strokec4     <div className=\cf6 \strokec6 "h-screen flex flex-col bg-gray-50"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4       \{\cf8 \strokec8 /* Header */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4       <div className=\cf6 \strokec6 "bg-white shadow-sm px-4 py-3 flex items-center gap-4 relative z-20"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4         <\cf5 \strokec5 Link\cf0 \strokec4  to=\{createPageUrl(\cf6 \strokec6 "RoleSelection"\cf0 \strokec4 )\}>\cb1 \strokec4 \
+\cb3 \strokec4           <\cf5 \strokec5 Button\cf0 \strokec4  variant=\cf6 \strokec6 "ghost"\cf0 \strokec4  size=\cf6 \strokec6 "icon"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4             <\cf5 \strokec5 ArrowLeft\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5"\cf0 \strokec4  />\cb1 \strokec4 \
+\cb3 \strokec4           </\cf5 \strokec5 Button\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4         </\cf5 \strokec5 Link\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4         <div>\cb1 \strokec4 \
+\cb3 \strokec4           <h1 className=\cf6 \strokec6 "font-semibold text-gray-900"\cf0 \strokec4 >\cf5 \strokec5 Passenger\cf0 \strokec4  \cf5 \strokec5 Mode\cf0 \strokec4 </h1>\cb1 \strokec4 \
+\cb3 \strokec4           <p className=\cf6 \strokec6 "text-sm text-gray-500"\cf0 \strokec4 >\cf5 \strokec5 EXPO\cf0 \strokec4  \cf5 \strokec5 District\cf0 \strokec4 </p>\cb1 \strokec4 \
+\cb3 \strokec4         </div>\cb1 \strokec4 \
+\cb3 \strokec4       </div>\cb1 \strokec4 \
+\
+\cb3 \strokec4       \{\cf8 \strokec8 /* Map - Background Layer */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4       <div className=\cf6 \strokec6 "flex-1 relative"\cf0 \strokec4  style=\{\{ zIndex: \cf7 \strokec7 0\cf0 \strokec4  \}\}>\cb1 \strokec4 \
+\cb3 \strokec4         <\cf5 \strokec5 MapComponent\cf0 \cb1 \strokec4 \
+\cb3 \strokec4           pois=\{pois\}\cb1 \strokec4 \
+\cb3 \strokec4           route=\{route\}\cb1 \strokec4 \
+\cb3 \strokec4           markers=\{markers\}\cb1 \strokec4 \
+\cb3 \strokec4           onMapClick=\{handleMapClick\}\cb1 \strokec4 \
+\cb3 \strokec4           onPOIClick=\{handlePOIClick\}\cb1 \strokec4 \
+\cb3 \strokec4           className=\cf6 \strokec6 "absolute inset-0"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4         />\cb1 \strokec4 \
+\cb3 \strokec4         \cb1 \strokec4 \
+\cb3 \strokec4         \{\cf8 \strokec8 /* Map overlay instructions */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4         <div className=\cf6 \strokec6 "absolute top-4 left-4 right-4 pointer-events-none"\cf0 \strokec4  style=\{\{ zIndex: \cf7 \strokec7 5\cf0 \strokec4  \}\}>\cb1 \strokec4 \
+\cb3 \strokec4           <div className=\cf6 \strokec6 "bg-white rounded-xl shadow-lg p-4 pointer-events-auto border border-green-100"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4             <div className=\cf6 \strokec6 "flex items-center gap-3"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4               <div className=\cf6 \strokec6 "w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                 <\cf5 \strokec5 Navigation\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5 text-white"\cf0 \strokec4  />\cb1 \strokec4 \
+\cb3 \strokec4               </div>\cb1 \strokec4 \
+\cb3 \strokec4               <div>\cb1 \strokec4 \
+\cb3 \strokec4                 <p className=\cf6 \strokec6 "font-semibold text-gray-900"\cf0 \strokec4 >\cf5 \strokec5 Tap\cf0 \strokec4  anywhere on map</p>\cb1 \strokec4 \
+\cb3 \strokec4                 <p className=\cf6 \strokec6 "text-sm text-green-600"\cf0 \strokec4 >to \cf2 \strokec2 set\cf0 \strokec4  your destination</p>\cb1 \strokec4 \
+\cb3 \strokec4               </div>\cb1 \strokec4 \
+\cb3 \strokec4             </div>\cb1 \strokec4 \
+\cb3 \strokec4           </div>\cb1 \strokec4 \
+\cb3 \strokec4         </div>\cb1 \strokec4 \
+\cb3 \strokec4       </div>\cb1 \strokec4 \
+\
+\cb3 \strokec4       \{\cf8 \strokec8 /* Floating Panel - Plan Your Trip */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4       <\cf5 \strokec5 FloatingPanel\cf0 \strokec4  title=\cf6 \strokec6 "Plan Your Trip"\cf0 \strokec4  position=\cf6 \strokec6 "bottom"\cf0 \strokec4  defaultExpanded=\{\cf2 \strokec2 true\cf0 \strokec4 \}>\cb1 \strokec4 \
+\cb3 \strokec4         <div className=\cf6 \strokec6 "space-y-6"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4           \{\cf8 \strokec8 /* Route Selection */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4           <div className=\cf6 \strokec6 "space-y-4"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4             <div className=\cf6 \strokec6 "space-y-3"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4               <div className=\cf6 \strokec6 "flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                 <div className=\cf6 \strokec6 "w-8 h-8 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                   <span className=\cf6 \strokec6 "text-white text-sm font-bold"\cf0 \strokec4 >\cf5 \strokec5 A\cf0 \strokec4 </span>\cb1 \strokec4 \
+\cb3 \strokec4                 </div>\cb1 \strokec4 \
+\cb3 \strokec4                 <div className=\cf6 \strokec6 "flex-1"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                   <p className=\cf6 \strokec6 "font-semibold text-gray-900"\cf0 \strokec4 >\cf5 \strokec5 From\cf0 \strokec4 </p>\cb1 \strokec4 \
+\cb3 \strokec4                   <p className=\cf6 \strokec6 "text-sm text-gray-600"\cf0 \strokec4 >\{\cf5 \strokec5 RESIDENTIAL_COMPLEX\cf0 \strokec4 .address\}</p>\cb1 \strokec4 \
+\cb3 \strokec4                 </div>\cb1 \strokec4 \
+\cb3 \strokec4               </div>\cb1 \strokec4 \
+\
+\cb3 \strokec4               <div className=\cf6 \strokec6 "flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                 <div className=\cf6 \strokec6 "w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                   <span className=\cf6 \strokec6 "text-white text-sm font-bold"\cf0 \strokec4 >\cf5 \strokec5 B\cf0 \strokec4 </span>\cb1 \strokec4 \
+\cb3 \strokec4                 </div>\cb1 \strokec4 \
+\cb3 \strokec4                 <div className=\cf6 \strokec6 "flex-1"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                   <p className=\cf6 \strokec6 "font-semibold text-gray-900"\cf0 \strokec4 >\cf5 \strokec5 To\cf0 \strokec4 </p>\cb1 \strokec4 \
+\cb3 \strokec4                   <p className=\cf6 \strokec6 "text-sm text-gray-600"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                     \{destination ? destination.address : \cf6 \strokec6 "Tap on map to select destination"\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4                   </p>\cb1 \strokec4 \
+\cb3 \strokec4                 </div>\cb1 \strokec4 \
+\cb3 \strokec4               </div>\cb1 \strokec4 \
+\cb3 \strokec4             </div>\cb1 \strokec4 \
+\
+\cb3 \strokec4             \{\cf8 \strokec8 /* Route Stats */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4             \{route && (\cb1 \strokec4 \
+\cb3 \strokec4               <div className=\cf6 \strokec6 "flex gap-4 p-4 bg-white rounded-xl border shadow-sm"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                 <div className=\cf6 \strokec6 "flex items-center gap-2"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                   <\cf5 \strokec5 Route\cf0 \strokec4  className=\cf6 \strokec6 "w-4 h-4 text-green-500"\cf0 \strokec4  />\cb1 \strokec4 \
+\cb3 \strokec4                   <span className=\cf6 \strokec6 "text-sm font-semibold"\cf0 \strokec4 >\{route.distance.toFixed(\cf7 \strokec7 1\cf0 \strokec4 )\} km</span>\cb1 \strokec4 \
+\cb3 \strokec4                 </div>\cb1 \strokec4 \
+\cb3 \strokec4                 <div className=\cf6 \strokec6 "flex items-center gap-2"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                   <\cf5 \strokec5 Clock\cf0 \strokec4  className=\cf6 \strokec6 "w-4 h-4 text-green-500"\cf0 \strokec4  />\cb1 \strokec4 \
+\cb3 \strokec4                   <span className=\cf6 \strokec6 "text-sm font-semibold"\cf0 \strokec4 >\{route.duration\} min</span>\cb1 \strokec4 \
+\cb3 \strokec4                 </div>\cb1 \strokec4 \
+\cb3 \strokec4                 \{selectedPOIs.length > \cf7 \strokec7 0\cf0 \strokec4  && (\cb1 \strokec4 \
+\cb3 \strokec4                   <\cf5 \strokec5 Badge\cf0 \strokec4  className=\cf6 \strokec6 "bg-orange-100 text-orange-700"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                     +\{selectedPOIs.length\} stop\{selectedPOIs.length > \cf7 \strokec7 1\cf0 \strokec4  ? \cf6 \strokec6 's'\cf0 \strokec4  : \cf6 \strokec6 ''\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4                   </\cf5 \strokec5 Badge\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                 )\}\cb1 \strokec4 \
+\cb3 \strokec4               </div>\cb1 \strokec4 \
+\cb3 \strokec4             )\}\cb1 \strokec4 \
+\cb3 \strokec4           </div>\cb1 \strokec4 \
+\
+\cb3 \strokec4           \{\cf8 \strokec8 /* POI Selection */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4           <div className=\cf6 \strokec6 "space-y-4"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4             <div className=\cf6 \strokec6 "flex items-center justify-between"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4               <h3 className=\cf6 \strokec6 "font-semibold text-gray-900"\cf0 \strokec4 >\cf5 \strokec5 Add\cf0 \strokec4  \cf5 \strokec5 Stops\cf0 \strokec4 </h3>\cb1 \strokec4 \
+\cb3 \strokec4               <p className=\cf6 \strokec6 "text-xs text-green-600 font-medium"\cf0 \strokec4 >\cf5 \strokec5 Rating\cf0 \strokec4  \cf9 \strokec9 \uc0\u8805 \cf0 \strokec4  \cf7 \strokec7 4.6\cf0 \strokec4  only</p>\cb1 \strokec4 \
+\cb3 \strokec4             </div>\cb1 \strokec4 \
+\cb3 \strokec4             \cb1 \strokec4 \
+\cb3 \strokec4             <div className=\cf6 \strokec6 "grid grid-cols-2 gap-3"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4               \{[\cf6 \strokec6 "ATM"\cf0 \strokec4 , \cf6 \strokec6 "Bakery"\cf0 \strokec4 , \cf6 \strokec6 "Pharmacy"\cf0 \strokec4 , \cf6 \strokec6 "Flowers"\cf0 \strokec4 ].map((category) => \{\cb1 \strokec4 \
+\cb3 \strokec4                 \cf2 \strokec2 const\cf0 \strokec4  categoryPOIs = pois.filter(poi => poi.category === category && poi.rating >= \cf7 \strokec7 4.6\cf0 \strokec4 );\cb1 \strokec4 \
+\cb3 \strokec4                 \cf2 \strokec2 const\cf0 \strokec4  isSelected = selectedPOIs.some(poi => poi.category === category);\cb1 \strokec4 \
+\cb3 \strokec4                 \cb1 \strokec4 \
+\cb3 \strokec4                 \cf2 \strokec2 return\cf0 \strokec4  (\cb1 \strokec4 \
+\cb3 \strokec4                   <div key=\{category\} className=\cf6 \strokec6 "flex items-center space-x-3"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                     <\cf5 \strokec5 Checkbox\cf0 \cb1 \strokec4 \
+\cb3 \strokec4                       id=\{category\}\cb1 \strokec4 \
+\cb3 \strokec4                       checked=\{isSelected\}\cb1 \strokec4 \
+\cb3 \strokec4                       disabled=\{categoryPOIs.length === \cf7 \strokec7 0\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4                       onCheckedChange=\{(checked) => \{\cb1 \strokec4 \
+\cb3 \strokec4                         \cf2 \strokec2 if\cf0 \strokec4  (categoryPOIs.length > \cf7 \strokec7 0\cf0 \strokec4 ) \{\cb1 \strokec4 \
+\cb3 \strokec4                           handlePOIToggle(categoryPOIs[\cf7 \strokec7 0\cf0 \strokec4 ], checked);\cb1 \strokec4 \
+\cb3 \strokec4                         \}\cb1 \strokec4 \
+\cb3 \strokec4                       \}\}\cb1 \strokec4 \
+\cb3 \strokec4                       className=\cf6 \strokec6 "data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4                     />\cb1 \strokec4 \
+\cb3 \strokec4                     <label htmlFor=\{category\} className=\cf6 \strokec6 "text-sm font-medium cursor-pointer"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                       \{category\} \{categoryPOIs.length > \cf7 \strokec7 0\cf0 \strokec4  ? \cf6 \strokec6 `(\cf0 \strokec4 $\{categoryPOIs.length\}\cf6 \strokec6 )`\cf0 \strokec4  : \cf6 \strokec6 '(none)'\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4                     </label>\cb1 \strokec4 \
+\cb3 \strokec4                   </div>\cb1 \strokec4 \
+\cb3 \strokec4                 );\cb1 \strokec4 \
+\cb3 \strokec4               \})\}\cb1 \strokec4 \
+\cb3 \strokec4             </div>\cb1 \strokec4 \
+\
+\cb3 \strokec4             \{\cf8 \strokec8 /* Selected POIs */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4             \{selectedPOIs.map((poi) => (\cb1 \strokec4 \
+\cb3 \strokec4               <div key=\{poi.id\} className=\cf6 \strokec6 "flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4                 <div>\cb1 \strokec4 \
+\cb3 \strokec4                   <p className=\cf6 \strokec6 "font-semibold text-gray-900"\cf0 \strokec4 >\{poi.name\}</p>\cb1 \strokec4 \
+\cb3 \strokec4                   <p className=\cf6 \strokec6 "text-sm text-gray-600"\cf0 \strokec4 >\{poi.category\} \cf9 \strokec9 \'95\cf0 \strokec4  \cf9 \strokec9 \uc0\u11088 \cf0 \strokec4  \{poi.rating\}</p>\cb1 \strokec4 \
+\cb3 \strokec4                 </div>\cb1 \strokec4 \
+\cb3 \strokec4               </div>\cb1 \strokec4 \
+\cb3 \strokec4             ))\}\cb1 \strokec4 \
+\cb3 \strokec4           </div>\cb1 \strokec4 \
+\
+\cb3 \strokec4           \{\cf8 \strokec8 /* Action Buttons */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4           <div className=\cf6 \strokec6 "flex gap-3 pt-4 border-t border-gray-100"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4             <\cf5 \strokec5 Button\cf0 \strokec4  \cb1 \strokec4 \
+\cb3 \strokec4               variant=\cf6 \strokec6 "outline"\cf0 \strokec4  \cb1 \strokec4 \
+\cb3 \strokec4               onClick=\{resetRoute\} \cb1 \strokec4 \
+\cb3 \strokec4               className=\cf6 \strokec6 "flex-1 border-gray-300 hover:bg-gray-50"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             >\cb1 \strokec4 \
+\cb3 \strokec4               <\cf5 \strokec5 RotateCcw\cf0 \strokec4  className=\cf6 \strokec6 "w-4 h-4 mr-2"\cf0 \strokec4  />\cb1 \strokec4 \
+\cb3 \strokec4               \cf5 \strokec5 Reset\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             </\cf5 \strokec5 Button\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4             <\cf5 \strokec5 Button\cf0 \strokec4  \cb1 \strokec4 \
+\cb3 \strokec4               className=\cf6 \strokec6 "flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-lg"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4               disabled=\{!destination || isLoading\}\cb1 \strokec4 \
+\cb3 \strokec4               onClick=\{() => alert(\cf6 \strokec6 "Demo: Trip confirmed! Driver will arrive shortly."\cf0 \strokec4 )\}\cb1 \strokec4 \
+\cb3 \strokec4             >\cb1 \strokec4 \
+\cb3 \strokec4               \{isLoading ? \cf6 \strokec6 "Building Route..."\cf0 \strokec4  : \cf6 \strokec6 "Confirm Trip"\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4             </\cf5 \strokec5 Button\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4           </div>\cb1 \strokec4 \
+\cb3 \strokec4         </div>\cb1 \strokec4 \
+\cb3 \strokec4       </\cf5 \strokec5 FloatingPanel\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4     </div>\cb1 \strokec4 \
+\cb3 \strokec4   );\cb1 \strokec4 \
+\cb3 \strokec4 \}\cb1 \strokec4 \
+}

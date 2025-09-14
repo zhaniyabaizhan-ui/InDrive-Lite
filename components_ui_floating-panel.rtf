@@ -1,0 +1,125 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;\red255\green255\blue254;\red0\green0\blue0;
+\red14\green110\blue109;\red144\green1\blue18;\red15\green112\blue1;\red19\green118\blue70;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c100000;\cssrgb\c100000\c100000\c99608;\cssrgb\c0\c0\c0;
+\cssrgb\c0\c50196\c50196;\cssrgb\c63922\c8235\c8235;\cssrgb\c0\c50196\c0;\cssrgb\c3529\c52549\c34510;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 import\cf0 \strokec4  \cf5 \strokec5 React\cf0 \strokec4 , \{ useState \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "react"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ motion, \cf5 \strokec5 AnimatePresence\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "framer-motion"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 Card\cf0 \strokec4 , \cf5 \strokec5 CardContent\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/components/ui/card"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 Button\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "@/components/ui/button"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cf2 \cb3 \strokec2 import\cf0 \strokec4  \{ \cf5 \strokec5 ChevronUp\cf0 \strokec4 , \cf5 \strokec5 ChevronDown\cf0 \strokec4 , \cf5 \strokec5 ChevronLeft\cf0 \strokec4 , \cf5 \strokec5 ChevronRight\cf0 \strokec4  \} \cf2 \strokec2 from\cf0 \strokec4  \cf6 \strokec6 "lucide-react"\cf0 \strokec4 ;\cb1 \strokec4 \
+\
+\cf2 \cb3 \strokec2 export\cf0 \strokec4  \cf2 \strokec2 default\cf0 \strokec4  \cf2 \strokec2 function\cf0 \strokec4  \cf5 \strokec5 FloatingPanel\cf0 \strokec4 (\{ \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4   children, \cb1 \strokec4 \
+\cb3 \strokec4   title,\cb1 \strokec4 \
+\cb3 \strokec4   position = \cf6 \strokec6 "bottom"\cf0 \strokec4 , \cf7 \strokec7 // "bottom", "left", "right"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4   defaultExpanded = \cf2 \strokec2 false\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4   className = \cf6 \strokec6 ""\cf0 \cb1 \strokec4 \
+\cb3 \strokec4 \}) \{\cb1 \strokec4 \
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  [isExpanded, setIsExpanded] = useState(defaultExpanded);\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  getPositionStyles = () => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 switch\cf0 \strokec4 (position) \{\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 case\cf0 \strokec4  \cf6 \strokec6 "left"\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 return\cf0 \strokec4  \{\cb1 \strokec4 \
+\cb3 \strokec4           position: \cf6 \strokec6 "fixed"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           left: isExpanded ? \cf6 \strokec6 "0"\cf0 \strokec4  : \cf6 \strokec6 "-320px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           top: \cf6 \strokec6 "80px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           bottom: \cf6 \strokec6 "20px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           width: \cf6 \strokec6 "360px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           zIndex: \cf8 \strokec8 50\cf0 \cb1 \strokec4 \
+\cb3 \strokec4         \};\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 case\cf0 \strokec4  \cf6 \strokec6 "right"\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 return\cf0 \strokec4  \{\cb1 \strokec4 \
+\cb3 \strokec4           position: \cf6 \strokec6 "fixed"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           right: isExpanded ? \cf6 \strokec6 "0"\cf0 \strokec4  : \cf6 \strokec6 "-320px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           top: \cf6 \strokec6 "80px"\cf0 \strokec4 , \cb1 \strokec4 \
+\cb3 \strokec4           bottom: \cf6 \strokec6 "20px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           width: \cf6 \strokec6 "360px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           zIndex: \cf8 \strokec8 50\cf0 \cb1 \strokec4 \
+\cb3 \strokec4         \};\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 case\cf0 \strokec4  \cf6 \strokec6 "bottom"\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 default\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 return\cf0 \strokec4  \{\cb1 \strokec4 \
+\cb3 \strokec4           position: \cf6 \strokec6 "fixed"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           left: \cf6 \strokec6 "0"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           right: \cf6 \strokec6 "0"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           bottom: isExpanded ? \cf6 \strokec6 "0"\cf0 \strokec4  : \cf6 \strokec6 "-400px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           height: isExpanded ? \cf6 \strokec6 "60vh"\cf0 \strokec4  : \cf6 \strokec6 "120px"\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4           zIndex: \cf8 \strokec8 50\cf0 \cb1 \strokec4 \
+\cb3 \strokec4         \};\cb1 \strokec4 \
+\cb3 \strokec4     \}\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 const\cf0 \strokec4  getToggleButton = () => \{\cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 const\cf0 \strokec4  baseClasses = \cf6 \strokec6 "absolute bg-white shadow-lg border rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors"\cf0 \strokec4 ;\cb1 \strokec4 \
+\cb3 \strokec4     \cb1 \strokec4 \
+\cb3 \strokec4     \cf2 \strokec2 switch\cf0 \strokec4 (position) \{\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 case\cf0 \strokec4  \cf6 \strokec6 "left"\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 return\cf0 \strokec4  (\cb1 \strokec4 \
+\cb3 \strokec4           <\cf5 \strokec5 Button\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             variant=\cf6 \strokec6 "ghost"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             size=\cf6 \strokec6 "icon"\cf0 \strokec4  \cb1 \strokec4 \
+\cb3 \strokec4             className=\{\cf6 \strokec6 `\cf0 \strokec4 $\{baseClasses\}\cf6 \strokec6  -right-5 top-4`\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4             onClick=\{() => setIsExpanded(!isExpanded)\}\cb1 \strokec4 \
+\cb3 \strokec4           >\cb1 \strokec4 \
+\cb3 \strokec4             \{isExpanded ? <\cf5 \strokec5 ChevronLeft\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5"\cf0 \strokec4  /> : <\cf5 \strokec5 ChevronRight\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5"\cf0 \strokec4  />\}\cb1 \strokec4 \
+\cb3 \strokec4           </\cf5 \strokec5 Button\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4         );\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 case\cf0 \strokec4  \cf6 \strokec6 "right"\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 return\cf0 \strokec4  (\cb1 \strokec4 \
+\cb3 \strokec4           <\cf5 \strokec5 Button\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             variant=\cf6 \strokec6 "ghost"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             size=\cf6 \strokec6 "icon"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             className=\{\cf6 \strokec6 `\cf0 \strokec4 $\{baseClasses\}\cf6 \strokec6  -left-5 top-4`\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4             onClick=\{() => setIsExpanded(!isExpanded)\}\cb1 \strokec4 \
+\cb3 \strokec4           >\cb1 \strokec4 \
+\cb3 \strokec4             \{isExpanded ? <\cf5 \strokec5 ChevronRight\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5"\cf0 \strokec4  /> : <\cf5 \strokec5 ChevronLeft\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5"\cf0 \strokec4  />\}\cb1 \strokec4 \
+\cb3 \strokec4           </\cf5 \strokec5 Button\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4         );\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 case\cf0 \strokec4  \cf6 \strokec6 "bottom"\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4       \cf2 \strokec2 default\cf0 \strokec4 :\cb1 \strokec4 \
+\cb3 \strokec4         \cf2 \strokec2 return\cf0 \strokec4  (\cb1 \strokec4 \
+\cb3 \strokec4           <\cf5 \strokec5 Button\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             variant=\cf6 \strokec6 "ghost"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             size=\cf6 \strokec6 "icon"\cf0 \cb1 \strokec4 \
+\cb3 \strokec4             className=\{\cf6 \strokec6 `\cf0 \strokec4 $\{baseClasses\}\cf6 \strokec6  left-1/2 transform -translate-x-1/2 -top-5`\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4             onClick=\{() => setIsExpanded(!isExpanded)\}\cb1 \strokec4 \
+\cb3 \strokec4           >\cb1 \strokec4 \
+\cb3 \strokec4             \{isExpanded ? <\cf5 \strokec5 ChevronDown\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5"\cf0 \strokec4  /> : <\cf5 \strokec5 ChevronUp\cf0 \strokec4  className=\cf6 \strokec6 "w-5 h-5"\cf0 \strokec4  />\}\cb1 \strokec4 \
+\cb3 \strokec4           </\cf5 \strokec5 Button\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4         );\cb1 \strokec4 \
+\cb3 \strokec4     \}\cb1 \strokec4 \
+\cb3 \strokec4   \};\cb1 \strokec4 \
+\
+\cb3 \strokec4   \cf2 \strokec2 return\cf0 \strokec4  (\cb1 \strokec4 \
+\cb3 \strokec4     <motion.div\cb1 \strokec4 \
+\cb3 \strokec4       className=\{\cf6 \strokec6 `bg-white rounded-t-2xl shadow-2xl \cf0 \strokec4 $\{position === \cf6 \strokec6 'bottom'\cf0 \strokec4  ? \cf6 \strokec6 'rounded-t-2xl'\cf0 \strokec4  : \cf6 \strokec6 'rounded-r-2xl'\cf0 \strokec4 \}\cf6 \strokec6  \cf0 \strokec4 $\{className\}\cf6 \strokec6 `\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4       style=\{getPositionStyles()\}\cb1 \strokec4 \
+\cb3 \strokec4       animate=\{getPositionStyles()\}\cb1 \strokec4 \
+\cb3 \strokec4       transition=\{\{ type: \cf6 \strokec6 "spring"\cf0 \strokec4 , damping: \cf8 \strokec8 25\cf0 \strokec4 , stiffness: \cf8 \strokec8 200\cf0 \strokec4  \}\}\cb1 \strokec4 \
+\cb3 \strokec4     >\cb1 \strokec4 \
+\cb3 \strokec4       \{getToggleButton()\}\cb1 \strokec4 \
+\cb3 \strokec4       \cb1 \strokec4 \
+\cb3 \strokec4       <div className=\cf6 \strokec6 "h-full flex flex-col"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4         \{\cf7 \strokec7 /* Header */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4         <div className=\cf6 \strokec6 "p-4 border-b border-gray-100"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4           <h2 className=\cf6 \strokec6 "text-lg font-semibold text-gray-900"\cf0 \strokec4 >\{title\}</h2>\cb1 \strokec4 \
+\cb3 \strokec4         </div>\cb1 \strokec4 \
+\cb3 \strokec4         \cb1 \strokec4 \
+\cb3 \strokec4         \{\cf7 \strokec7 /* Content */\cf0 \strokec4 \}\cb1 \strokec4 \
+\cb3 \strokec4         <div className=\cf6 \strokec6 "flex-1 overflow-y-auto p-4"\cf0 \strokec4 >\cb1 \strokec4 \
+\cb3 \strokec4           \{children\}\cb1 \strokec4 \
+\cb3 \strokec4         </div>\cb1 \strokec4 \
+\cb3 \strokec4       </div>\cb1 \strokec4 \
+\cb3 \strokec4     </motion.div>\cb1 \strokec4 \
+\cb3 \strokec4   );\cb1 \strokec4 \
+\cb3 \strokec4 \}\cb1 \strokec4 \
+}
