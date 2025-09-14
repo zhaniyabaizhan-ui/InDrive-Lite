@@ -1,0 +1,208 @@
+
+import React, { useEffect, useRef } from "react";
+import { MapContainer, TileLayer, Circle, Marker, Popup, Polyline, useMap } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+// Fix for default markers - use simple approach
+const defaultIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+L.Marker.prototype.options.icon = defaultIcon;
+
+const EXPO_CENTER = [51.0916, 71.4189];
+const SANDBOX_RADIUS = 3000; // 3km in meters
+
+// Custom icons
+const createCustomIcon = (color, icon) => {
+  return L.divIcon({
+    className: "custom-marker",
+    html: `
+      <div style="
+        background-color: ${color};
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        border: 3px solid white;
+      ">
+        <span style="color: white; font-size: 14px;">${icon}</span>
+      </div>
+    `,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+  });
+};
+
+const poiIcons = {
+  ATM: createCustomIcon("#3B82F6", "💳"),
+  Bakery: createCustomIcon("#F59E0B", "🥖"),
+  Pharmacy: createCustomIcon("#10B981", "💊"),
+  Flowers: createCustomIcon("#EC4899", "🌸"),
+};
+
+function MapUpdater({ center, zoom, route, onMapClick }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (center) {
+      map.setView(center, zoom || 13);
+    }
+  }, [center, zoom, map]);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (onMapClick) {
+        onMapClick(e.latlng);
+      }
+    };
+
+    map.on("click", handleClick);
+    return () => map.off("click", handleClick);
+  }, [map, onMapClick]);
+
+  return null;
+}
+
+export default function MapComponent({
+  center = EXPO_CENTER,
+  zoom = 13,
+  pois = [],
+  route = null,
+  markers = [],
+  demandZones = [],
+  showSandbox = true,
+  onMapClick,
+  onPOIClick,
+  className = ""
+}) {
+  const mapRef = useRef();
+
+  return (
+    <div className={`w-full h-full ${className}`}>
+      <MapContainer
+        center={center}
+        zoom={zoom}
+        style={{ width: "100%", height: "100%" }}
+        ref={mapRef}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        <MapUpdater
+          center={center}
+          zoom={zoom}
+          route={route}
+          onMapClick={onMapClick}
+        />
+
+        {/* Sandbox boundary */}
+        {showSandbox && (
+          <Circle
+            center={EXPO_CENTER}
+            radius={SANDBOX_RADIUS}
+            pathOptions={{
+              color: "#00B865",
+              weight: 2,
+              opacity: 0.6,
+              fillOpacity: 0.05,
+              dashArray: "5, 5"
+            }}
+          />
+        )}
+
+        {/* POI markers */}
+        {pois.map((poi, index) => (
+          <Marker
+            key={index}
+            position={[poi.latitude, poi.longitude]}
+            icon={poiIcons[poi.category] || poiIcons.ATM}
+            eventHandlers={{
+              click: () => onPOIClick && onPOIClick(poi)
+            }}
+          >
+            <Popup>
+              <div className="text-center">
+                <h3 className="font-semibold text-gray-800">{poi.name}</h3>
+                <p className="text-sm text-gray-600">{poi.category}</p>
+                <div className="flex items-center justify-center mt-1">
+                  <span className="text-yellow-500">★</span>
+                  <span className="ml-1 text-sm font-medium">{poi.rating}</span>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+
+        {/* Custom markers */}
+        {markers.map((marker, index) => (
+          <Marker
+            key={index}
+            position={[marker.lat, marker.lng]}
+            icon={defaultIcon}
+          >
+            {marker.popup && <Popup>{marker.popup}</Popup>}
+          </Marker>
+        ))}
+
+        {/* Route polyline */}
+        {route && route.coordinates && (
+          <Polyline
+            positions={route.coordinates}
+            pathOptions={{
+              color: "#00B865",
+              weight: 4,
+              opacity: 0.8
+            }}
+          />
+        )}
+
+        {/* Demand zones for driver mode */}
+        {demandZones.map((zone, index) => (
+          <Circle
+            key={index}
+            center={[zone.latitude, zone.longitude]}
+            radius={zone.radius || 200}
+            pathOptions={{
+              color: zone.zone_type === "event" ? "#F59E0B" : 
+                     zone.zone_type === "ripening" ? "#8B5CF6" : 
+                     zone.zone_type === "micro_hotspot" ? "#F59E0B" :
+                     "#EF4444",
+              weight: 2,
+              opacity: 0.7,
+              fillOpacity: zone.zone_type === "heatmap" ? 0.3 : 
+                           zone.zone_type === "micro_hotspot" ? 0.5 : 0.1,
+            }}
+          >
+            <Popup>
+              <div className="text-center">
+                <h3 className="font-semibold">{zone.name}</h3>
+                {zone.zone_type === "micro_hotspot" ? (
+                   <p className="text-sm text-gray-600">Regular pickup spot - {zone.demand_level} demand</p>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-600">{zone.demand_level} demand</p>
+                    {zone.request_count && (
+                      <p className="text-xs text-gray-500">{zone.request_count} requests</p>
+                    )}
+                  </>
+                )}
+              </div>
+            </Popup>
+          </Circle>
+        ))}
+      </MapContainer>
+    </div>
+  );
+}

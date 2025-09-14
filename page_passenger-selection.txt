@@ -1,0 +1,311 @@
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Navigation, MapPin, Plus, Clock, Route, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { createPageUrl } from "@/utils";
+import { POI } from "@/entities/POI";
+
+import MapComponent from "../components/map/MapComponent";
+import FloatingPanel from "../components/ui/FloatingPanel";
+
+const RESIDENTIAL_COMPLEX = {
+  lat: 51.0850,
+  lng: 71.4150,
+  address: "Green Quarter Residential Complex"
+};
+
+export default function PassengerMode() {
+  const [pois, setPois] = useState([]);
+  const [destination, setDestination] = useState(null);
+  const [selectedPOIs, setSelectedPOIs] = useState([]);
+  const [route, setRoute] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    loadPOIs();
+  }, []);
+
+  const loadPOIs = async () => {
+    const poisData = await POI.list();
+    setPois(poisData);
+  };
+
+  const handleMapClick = (latlng) => {
+    const newDestination = {
+      lat: latlng.lat,
+      lng: latlng.lng,
+      address: `Location: ${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`
+    };
+    setDestination(newDestination);
+    buildRoute(newDestination);
+  };
+
+  const buildRoute = (dest) => {
+    if (!dest) return;
+
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      const waypoints = [
+        [RESIDENTIAL_COMPLEX.lat, RESIDENTIAL_COMPLEX.lng],
+        ...selectedPOIs.map(poi => [poi.latitude, poi.longitude]),
+        [dest.lat, dest.lng]
+      ];
+      
+      const routeCoords = [];
+      for (let i = 0; i < waypoints.length - 1; i++) {
+        const start = waypoints[i];
+        const end = waypoints[i + 1];
+        
+        const steps = 5;
+        for (let j = 0; j <= steps; j++) {
+          const ratio = j / steps;
+          const lat = start[0] + (end[0] - start[0]) * ratio + (Math.random() - 0.5) * 0.002;
+          const lng = start[1] + (end[1] - start[1]) * ratio + (Math.random() - 0.5) * 0.002;
+          routeCoords.push([lat, lng]);
+        }
+      }
+
+      setRoute({
+        coordinates: routeCoords,
+        distance: calculateDistance(waypoints) * 1.2,
+        duration: calculateDuration(waypoints),
+      });
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  const calculateDistance = (waypoints) => {
+    let total = 0;
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      total += getDistanceFromLatLonInKm(
+        waypoints[i][0], waypoints[i][1],
+        waypoints[i + 1][0], waypoints[i + 1][1]
+      );
+    }
+    return total;
+  };
+
+  const calculateDuration = (waypoints) => {
+    const distance = calculateDistance(waypoints);
+    return Math.round(distance / 30 * 60);
+  };
+
+  const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  const deg2rad = (deg) => deg * (Math.PI/180);
+
+  const handlePOIToggle = (poi, checked) => {
+    if (checked) {
+      if (poi.rating >= 4.6) {
+        setSelectedPOIs([...selectedPOIs, poi]);
+      }
+    } else {
+      setSelectedPOIs(selectedPOIs.filter(p => p.id !== poi.id));
+    }
+    
+    if (destination) {
+      buildRoute(destination);
+    }
+  };
+
+  const handlePOIClick = (poi) => {
+    const isSelected = selectedPOIs.some(p => p.id === poi.id);
+    if (poi.rating >= 4.6) {
+      handlePOIToggle(poi, !isSelected);
+    }
+  };
+
+  const resetRoute = () => {
+    setDestination(null);
+    setRoute(null);
+    setSelectedPOIs([]);
+  };
+
+  const markers = [
+    {
+      lat: RESIDENTIAL_COMPLEX.lat,
+      lng: RESIDENTIAL_COMPLEX.lng,
+      popup: "Your pickup location"
+    }
+  ];
+
+  if (destination) {
+    markers.push({
+      lat: destination.lat,
+      lng: destination.lng,
+      popup: "Your destination"
+    });
+  }
+
+  return (
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm px-4 py-3 flex items-center gap-4 relative z-20">
+        <Link to={createPageUrl("RoleSelection")}>
+          <Button variant="ghost" size="icon">
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+        </Link>
+        <div>
+          <h1 className="font-semibold text-gray-900">Passenger Mode</h1>
+          <p className="text-sm text-gray-500">EXPO District</p>
+        </div>
+      </div>
+
+      {/* Map - Background Layer */}
+      <div className="flex-1 relative" style={{ zIndex: 0 }}>
+        <MapComponent
+          pois={pois}
+          route={route}
+          markers={markers}
+          onMapClick={handleMapClick}
+          onPOIClick={handlePOIClick}
+          className="absolute inset-0"
+        />
+        
+        {/* Map overlay instructions */}
+        <div className="absolute top-4 left-4 right-4 pointer-events-none" style={{ zIndex: 5 }}>
+          <div className="bg-white rounded-xl shadow-lg p-4 pointer-events-auto border border-green-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                <Navigation className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">Tap anywhere on map</p>
+                <p className="text-sm text-green-600">to set your destination</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating Panel - Plan Your Trip */}
+      <FloatingPanel title="Plan Your Trip" position="bottom" defaultExpanded={true}>
+        <div className="space-y-6">
+          {/* Route Selection */}
+          <div className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
+                <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">A</span>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900">From</p>
+                  <p className="text-sm text-gray-600">{RESIDENTIAL_COMPLEX.address}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">B</span>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900">To</p>
+                  <p className="text-sm text-gray-600">
+                    {destination ? destination.address : "Tap on map to select destination"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Route Stats */}
+            {route && (
+              <div className="flex gap-4 p-4 bg-white rounded-xl border shadow-sm">
+                <div className="flex items-center gap-2">
+                  <Route className="w-4 h-4 text-green-500" />
+                  <span className="text-sm font-semibold">{route.distance.toFixed(1)} km</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-green-500" />
+                  <span className="text-sm font-semibold">{route.duration} min</span>
+                </div>
+                {selectedPOIs.length > 0 && (
+                  <Badge className="bg-orange-100 text-orange-700">
+                    +{selectedPOIs.length} stop{selectedPOIs.length > 1 ? 's' : ''}
+                  </Badge>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* POI Selection */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-gray-900">Add Stops</h3>
+              <p className="text-xs text-green-600 font-medium">Rating ≥ 4.6 only</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {["ATM", "Bakery", "Pharmacy", "Flowers"].map((category) => {
+                const categoryPOIs = pois.filter(poi => poi.category === category && poi.rating >= 4.6);
+                const isSelected = selectedPOIs.some(poi => poi.category === category);
+                
+                return (
+                  <div key={category} className="flex items-center space-x-3">
+                    <Checkbox
+                      id={category}
+                      checked={isSelected}
+                      disabled={categoryPOIs.length === 0}
+                      onCheckedChange={(checked) => {
+                        if (categoryPOIs.length > 0) {
+                          handlePOIToggle(categoryPOIs[0], checked);
+                        }
+                      }}
+                      className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
+                    />
+                    <label htmlFor={category} className="text-sm font-medium cursor-pointer">
+                      {category} {categoryPOIs.length > 0 ? `(${categoryPOIs.length})` : '(none)'}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Selected POIs */}
+            {selectedPOIs.map((poi) => (
+              <div key={poi.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+                <div>
+                  <p className="font-semibold text-gray-900">{poi.name}</p>
+                  <p className="text-sm text-gray-600">{poi.category} • ⭐ {poi.rating}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-4 border-t border-gray-100">
+            <Button 
+              variant="outline" 
+              onClick={resetRoute} 
+              className="flex-1 border-gray-300 hover:bg-gray-50"
+            >
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset
+            </Button>
+            <Button 
+              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-lg"
+              disabled={!destination || isLoading}
+              onClick={() => alert("Demo: Trip confirmed! Driver will arrive shortly.")}
+            >
+              {isLoading ? "Building Route..." : "Confirm Trip"}
+            </Button>
+          </div>
+        </div>
+      </FloatingPanel>
+    </div>
+  );
+}
