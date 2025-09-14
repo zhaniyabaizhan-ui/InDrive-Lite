@@ -2,7 +2,7 @@
 
 A simplified demo of the **inDrive** app focused on the EXPO district in Astana.  
 This project showcases both **Passenger** and **Driver** perspectives in a 3km sandbox environment.
-
+test the demo version - https://in-drive-lite-9e0d6af3.base44.app/DriverMode
 ---
 
 ## Features
