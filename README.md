@@ -32,11 +32,11 @@ This project showcases both **Passenger** and **Driver** perspectives in a 3km s
 ## Screenshots
 Passenger mode:
 
-![Passenger Demo](screenshots/passenger.mode)
+![Passenger Demo](screenshots/passenger.mode.png)
 
 Driver mode:
 
-![Driver Demo](screenshots/driver.mode)
+![Driver Demo](screenshots/driver.mode.png)
 
 ---
 
