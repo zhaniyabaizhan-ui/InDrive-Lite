@@ -1,15 +1,62 @@
-# inDrive Lite (EXPO Astana)
+# inDrive Lite (Demo)
 
-Demo репозиторий: экспорт из Base44 + мок-данные.
+A simplified demo of the **inDrive** app focused on the EXPO district in Astana.  
+This project showcases both **Passenger** and **Driver** perspectives in a 3km sandbox environment.
 
-## Что есть
-- `/prompt/master_prompt.md` — полный промпт, по которому генерировали приложение.
-- `/base44_export/*.txt` — сырой экспорт страниц/модулей из Base44 (без правок).
-- `/src/*` — если Base44 сгенерировал HTML/JS/CSS — здесь.
-- `/data/mock_data.json` — POI, events, ripening, heatmap points.
-- `/screenshots/*` — скрины Passenger/Driver.
+---
 
-## Примечания
-- Карта — нижний слой; UI — бело-зелёные панели поверх (как inDrive).
-- Маршрутизация должна работать по дорогам (2GIS / OSRM / ORS).
-- Сценарии: Morning Peak, Evening Concert, Custom (Bakery).
+## Features
+
+### Passenger Mode
+- A→B trip planning with interactive map.
+- Option to add **POI stops**: ATM, Bakery, Pharmacy, Flowers.
+- Route optimization with ETA comparison.
+- Simulated geotracker (blue dot for current location).
+- Clean inDrive-style interface (white-green).
+
+### Driver Mode
+- **Demand heatmap**: yellow - orange clusters.
+- **Events layer**: concerts, matches, exhibitions with details.
+- **Ripening zones**: areas expected to have outgoing demand in N minutes.
+- Side panel with **Top 3 demand zones now** and ETA from driver.
+
+---
+
+## Sandbox
+- Focused on the **Astana EXPO District** (radius 3km).
+- Mock POIs (rating 4.2–4.9).
+- Events and ripening zones.
+
+---
+
+## Screenshots
+Passenger mode:
+
+![Passenger Demo](screenshots/passenger.mode.png)
+
+Driver mode:
+
+![Driver Demo](screenshots/driver.mode.png)
+
+---
+
+## Tech / Data
+- Mock data for POIs, events, and demand zones.
+- Map rendering with **Leaflet/OSM**.
+- Files organized into:  
+  - `/Pages` (PassengerMode, DriverMode, RoleSelection)  
+  - `/Components` (map, ui)  
+  - `/Entities`, `/POI`, `/DemandZone`.
+
+---
+
+## Team Notes
+- This is a clickable demo prototype, not a full production app.
+- All data is anonymized and synthetic.
+
+---
+
+## Contact
+For demo and feedback:  
+Maintainer – zhaniyabaizhan-ui  
+
